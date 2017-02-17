@@ -27,6 +27,7 @@ Example - Encrypting a message:
 (.env)cgleeson@autotron:~/src/crypto$ ./cryptovault.py -k 'FMcFGpP@A2ygsf#B6oYuTaNuG(4edE8)' -m 'This is a secret demo message'
 
 **********PyCrypto Vault Start**********    
+
 Mode:  Encryption    
 Message is: This is a secret demo message    
 Message successfully encoded with AES-CBC.    
@@ -39,6 +40,7 @@ Example - Decrypting the same message:
 (.env)cgleeson@autotron:~/src/crypto$ ./cryptovault.py -k 'FMcFGpP@A2ygsf#B6oYuTaNuG(4edE8)' -c     'B/XVAmmcwXOEQ48pFac69Emk97gHQLNicq15YQc5PfEEqTOhF8i938/tGSVudHCu'    
 
 **********PyCrypto Vault Start**********    
+
 Mode:  Decryption    
 Ciphertext is: B/XVAmmcwXOEQ48pFac69Emk97gHQLNicq15YQc5PfEEqTOhF8i938/tGSVudHCu    
 Ciphertext successfully decoded with AES-CBC.    
