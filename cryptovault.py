@@ -96,8 +96,9 @@ def encode(key,initv,message,algo):
 
     #The input message must be a mulitple of 16 bytes for AES
     #We will only accept a 32 byte key, so a mulitple of 32 is used here.
-    multiplier = math.ceil(len(message) / 32)
-    length = 32 * multiplier
+    block_size = AES.block_size
+    multiplier = math.ceil(len(message) / block_size)
+    length = block_size * multiplier
     message_padded = message.ljust(length)
 
     try:
@@ -118,8 +119,8 @@ def decode(key,initv,ciphertext,algo):
     #Decode from base64
     ciphertext = base64.b64decode(ciphertext)
     #Slice the init vector from the ciphertext
-    initv = ciphertext[:16]
-    ciphertext = ciphertext[16:]
+    initv = ciphertext[:AES.block_size]
+    ciphertext = ciphertext[AES.block_size:]
 
     try:
         aes = AES.new(key, algo, initv)
