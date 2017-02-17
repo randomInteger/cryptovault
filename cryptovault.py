@@ -80,6 +80,14 @@ def parse_args():
             ciphertext = arg
     return (key, message, ciphertext)
 
+def test_key(key):
+    if len(key) != 32:
+        print("ERROR:  The key supplied was not 32 bytes!.")
+        print("ERROR:  Supplied key has length of:", len(key))
+        print("ERROR:  Key was:", key)
+        sys.exit(2)
+
+
 def encode(key,initv,message,algo):
     print("Message is:", message)
 
@@ -142,6 +150,9 @@ def decode(key,initv,ciphertext,algo):
 def main():
     #Parse args
     (key, message, ciphertext) = parse_args()
+
+    #Validate the key length before we begin
+    test_key(key)
 
     #Run begins
     print("\n**********PyCrypto Vault Start**********")
