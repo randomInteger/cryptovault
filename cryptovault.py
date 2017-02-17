@@ -44,7 +44,7 @@ def usage():
     """
     Prints usage for nmapper.py
     """
-    print('Usage: cryptovault.py [-h] -k <encryption key of 32 bytes> [-m <message> | -c <ciphertext>')
+    print('Usage: cryptovault.py [-h] -k <encryption key of 32 bytes> [-m <message> | -c <ciphertext>]')
     print('Usage: Encrypt mode - Supply a 32 byte key (256bits) and a message of any length')
     print('Usage: Decrypt mode - Supply a 32 byte key (256bits) and a ciphertext from the output of Encrypt Mode.')
 

@@ -16,7 +16,7 @@ deactivate
 
 Usage:
 
-Usage: cryptovault.py [-h] -k <encryption key of 32 bytes> [-m <message> | -c <ciphertext>    
+Usage: cryptovault.py [-h] -k <encryption key of 32 bytes> [-m <message> | -c <ciphertext>]
 Usage: Encrypt mode - Supply a 32 byte key (256bits) and a message of any length    
 Usage: Decrypt mode - Supply a 32 byte key (256bits) and a ciphertext from the output of Encrypt Mode.
 
