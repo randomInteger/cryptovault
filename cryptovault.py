@@ -64,7 +64,7 @@ def parse_args():
 
     Exits on any raised exception or if any required arguments are missing.
     """
-    key = ''
+    keystring = ''
     message = ''
     ciphertext = ''
 
@@ -82,12 +82,12 @@ def parse_args():
             usage()
             sys.exit()
         elif opt in ("-k", "--key"):
-            key = arg
+            keystring = arg
         elif opt in ("-m", "--message"):
             message = arg
         elif opt in ("-c", "--ciphertext"):
             ciphertext = arg
-    return (key, message, ciphertext)
+    return (keystring, message, ciphertext)
 
 
 def create_config_object(filepath):
@@ -115,17 +115,33 @@ def create_config_object(filepath):
     return json_object
 
 
-def key_in_file(key):
+def key_in_file(keystring):
+    """
+    Checks if keystring is a valid file (json).  If not, keystring is treated as a key
+    value and returned for validation later.
+
+    Returns:  The key from a readable file reference, else keystring is returned.
+    """
+    real_key = ''
     #If key is a filepath we can read, lets grab it and return it
-    if os.access(key, os.R_OK):
-        key_json = create_config_object(key)
-        real_key = key_json["32_byte_key"]
+    if os.access(keystring, os.R_OK):
+        key_json = create_config_object(keystring)
+        try:
+            real_key = key_json["32_byte_key"]
+        except TypeError as err:
+            print("Error: Parsing of file %s failed!  Exiting..." % keystring)
+            raise
         return real_key
     else:
-        return key
+        return keystring
 
 
 def test_key(key):
+    """
+    Extremely simple, 'is this string 32 bytes' check.
+
+    Bails out if the key is of invalid length.
+    """
     if len(key) != 32:
         print("ERROR:  The key supplied was not 32 bytes!.")
         print("ERROR:  Supplied key has length of:", len(key))
@@ -134,8 +150,12 @@ def test_key(key):
 
 
 def encode(key,initv,message,algo):
-    print("Message is:", message)
+    """
+    Attempts to encode the message via AES-CBC.
 
+    Encoded ciphertext is printed to the screen.
+    """
+    print("Message is:", message)
 
     #If no init vector was supplied, we will create one
     if initv == '':
@@ -166,7 +186,13 @@ def encode(key,initv,message,algo):
     ciphertext = str(ciphertext, "UTF-8")
     print("Ciphertext (base64):", ciphertext)
 
+
 def decode(key,initv,ciphertext,algo):
+    """
+    Attempts to decode the message via AES-CBC.
+
+    Decoded message is printed to the screen.
+    """
     print("Ciphertext is:", ciphertext)
 
     #Decode from base64
@@ -192,12 +218,13 @@ def decode(key,initv,ciphertext,algo):
     message = str(message, "UTF-8")
     print("Decrypted message (end-padded with empty space):", message)
 
+
 def main():
     #Parse args
-    (key, message, ciphertext) = parse_args()
+    (keystring, message, ciphertext) = parse_args()
 
     #Check if the key was given via a file or directly as input.
-    key = key_in_file(key)
+    key = key_in_file(keystring)
 
     #Validate the key length before we begin
     test_key(key)
@@ -217,10 +244,11 @@ def main():
         encode(key, initv, message, algo)
     elif message == '':
         print("Mode:  Decryption")
-        decoded = decode(key, initv, ciphertext, algo)
+        decode(key, initv, ciphertext, algo)
 
     #Run is complete
     print("\n**********PyCrypto Vault FINISHED**********")
+
 
 if __name__ == "__main__":
     main()
