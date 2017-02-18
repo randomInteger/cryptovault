@@ -48,3 +48,9 @@ Ciphertext init vector (raw): b'\x07\xf5\xd5\x02i\x9c\xc1s\x84C\x8f)\x15\xa7:\xf
 Decrypted message (end-padded with empty space): This is a secret demo message    
 
 **********PyCrypto Vault FINISHED**********
+
+Alternately, you can supply the key in a file if you prefer:    
+(.env)cgleeson@autotron:~/src/crypto$ cat key.json    
+{ "32_byte_key": "FMcFGpP@A2ygsf#B6oYuTaNuG(4edE8)" }    
+
+(.env)cgleeson@autotron:~/src/crypto$ ./cryptovault.py -k ./key.json -m 'A CLOAKED NETWORK IS A SECURE NETWORK'    

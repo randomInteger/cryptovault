@@ -27,12 +27,21 @@ Decrypted message (end-padded with empty space): This is a secret demo message
 
 **********PyCrypto Vault FINISHED**********
 
+Alternately, you can supply the key in a file if you prefer:
+
+(.env)cgleeson@autotron:~/src/crypto$ cat key.json
+{ "32_byte_key": "FMcFGpP@A2ygsf#B6oYuTaNuG(4edE8)" }
+
+(.env)cgleeson@autotron:~/src/crypto$ ./cryptovault.py -k ./key.json -m 'A CLOAKED NETWORK IS A SECURE NETWORK'
+
+
 
 Authors:  Chris Gleeson.
 """
 import os
 import sys
 import math
+import json
 import base64
 import datetime
 import getopt
@@ -79,6 +88,42 @@ def parse_args():
         elif opt in ("-c", "--ciphertext"):
             ciphertext = arg
     return (key, message, ciphertext)
+
+
+def create_config_object(filepath):
+    """
+    Takes a string that holds a file path and attempts to read the file and
+    parse the file as JSON.
+
+    Returns:  Parsed json object via json.loads()
+
+    Rasies:  IOError if the file cannot be read, TypeError on bad Type,
+    ValueError on failed parsing.
+    """
+    try:
+        json_raw = open(filepath).read()
+        json_object = json.loads(json_raw)
+    except IOError as err:
+        print("Error:  Failed to open file %s!  Exiting..." % filepath)
+        raise
+    except TypeError as err:
+        print("Error: Parsing of file %s failed!  Exiting..." % filepath)
+        raise
+    except ValueError as err:
+        print("Error: Parsing of file %s failed!  Exiting..." % filepath)
+        raise
+    return json_object
+
+
+def key_in_file(key):
+    #If key is a filepath we can read, lets grab it and return it
+    if os.access(key, os.R_OK):
+        key_json = create_config_object(key)
+        real_key = key_json["32_byte_key"]
+        return real_key
+    else:
+        return key
+
 
 def test_key(key):
     if len(key) != 32:
@@ -150,6 +195,9 @@ def decode(key,initv,ciphertext,algo):
 def main():
     #Parse args
     (key, message, ciphertext) = parse_args()
+
+    #Check if the key was given via a file or directly as input.
+    key = key_in_file(key)
 
     #Validate the key length before we begin
     test_key(key)
