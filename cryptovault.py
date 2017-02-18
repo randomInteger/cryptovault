@@ -10,8 +10,7 @@ Example - Encrypting a message:
 Mode:  Encryption
 Message is: This is a secret demo message
 Message successfully encoded with AES-CBC.
-Ciphertext init vector (raw): b'\x07\xf5\xd5\x02i\x9c\xc1s\x84C\x8f)\x15\xa7:\xf4'
-Ciphertext (base64): B/XVAmmcwXOEQ48pFac69Emk97gHQLNicq15YQc5PfEEqTOhF8i938/tGSVudHCu
+Ciphertext: B/XVAmmcwXOEQ48pFac69Emk97gHQLNicq15YQc5PfEEqTOhF8i938/tGSVudHCu
 
 **********PyCrypto Vault FINISHED**********
 
@@ -22,7 +21,6 @@ Example - Decrypting the same message:
 Mode:  Decryption
 Ciphertext is: B/XVAmmcwXOEQ48pFac69Emk97gHQLNicq15YQc5PfEEqTOhF8i938/tGSVudHCu
 Ciphertext successfully decoded with AES-CBC.
-Ciphertext init vector (raw): b'\x07\xf5\xd5\x02i\x9c\xc1s\x84C\x8f)\x15\xa7:\xf4'
 Decrypted message (end-padded with empty space): This is a secret demo message
 
 **********PyCrypto Vault FINISHED**********
@@ -32,7 +30,7 @@ Alternately, you can supply the key in a file if you prefer:
 (.env)cgleeson@autotron:~/src/crypto$ cat key.json
 { "32_byte_key": "FMcFGpP@A2ygsf#B6oYuTaNuG(4edE8)" }
 
-(.env)cgleeson@autotron:~/src/crypto$ ./cryptovault.py -k ./key.json -m 'A CLOAKED NETWORK IS A SECURE NETWORK'
+(.env)cgleeson@autotron:~/src/crypto$ ./cryptovault.py -k ./key.json -m 'This is a secret demo message'
 
 
 
@@ -182,9 +180,9 @@ def encode(key,initv,message,algo):
         raise e
 
     print("Message successfully encoded with AES-CBC.")
-    print("Ciphertext init vector (raw):", initv)
+    #print("Ciphertext init vector (raw):", initv) #debug only
     ciphertext = str(ciphertext, "UTF-8")
-    print("Ciphertext (base64):", ciphertext)
+    print("Ciphertext:", ciphertext)
 
 
 def decode(key,initv,ciphertext,algo):
@@ -214,7 +212,7 @@ def decode(key,initv,ciphertext,algo):
         raise e
 
     print("Ciphertext successfully decoded with AES-CBC.")
-    print("Ciphertext init vector (raw):", initv)
+    #print("Ciphertext init vector (raw):", initv) #debug only
     message = str(message, "UTF-8")
     print("Decrypted message (end-padded with whitespace):", message)
 
