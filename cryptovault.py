@@ -216,7 +216,7 @@ def decode(key,initv,ciphertext,algo):
     print("Ciphertext successfully decoded with AES-CBC.")
     print("Ciphertext init vector (raw):", initv)
     message = str(message, "UTF-8")
-    print("Decrypted message (end-padded with empty space):", message)
+    print("Decrypted message (end-padded with whitespace):", message)
 
 
 def main():
